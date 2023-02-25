@@ -11,11 +11,15 @@ const personalMovieDB = {
 };
 
 for (let index = 0; index < 2;) {
-    const lastWatched = prompt("What was the last movie you watched?");
-    if (lastWatched === undefined || lastWatched.length > 50) {
+    const lastWatched = prompt("What was the last movie you watched?"),
+        ratingOfMovie = prompt("How do you rate it?");
+    if (lastWatched === null ||
+        lastWatched.length > 50 ||
+        lastWatched == '' ||
+        ratingOfMovie == null ||
+        ratingOfMovie == '') {
         continue;
     }
-    const ratingOfMovie = prompt("How do you rate it?");
     personalMovieDB.movies[lastWatched] = ratingOfMovie;
     index++
 }
