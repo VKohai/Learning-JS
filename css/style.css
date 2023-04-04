@@ -7,6 +7,10 @@
     font-family: Roboto, sans-serif
 }
 
+.body_overflow-restriction {
+    overflow: hidden;
+}
+
 a {
     text-decoration: none
 }
@@ -662,6 +666,10 @@ a {
     height: 100%;
     overflow: hidden;
     background-color: rgba(0, 0, 0, .5)
+}
+
+.modal_showed {
+    display: block;
 }
 
 .modal__dialog {
