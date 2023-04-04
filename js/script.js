@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-});
+  });
+
 
   // Timer
   const deadline = "2023-05-20";
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   timerController.setClock(".timer", deadline);
 
+
   // Modal form
   const modalFormController = {
     modal: document.querySelector(".modal"),
@@ -103,11 +105,18 @@ document.addEventListener("DOMContentLoaded", () => {
     showModal: () => {
       modalFormController.modal.classList.add("modal_showed");
       document.body.classList.add("body_overflow-restriction");
+      clearInterval(modalTimerId);
+      window.removeEventListener('scroll', modalFormController.showModalByScroll);
     },
     closeModal: () => {
       modalFormController.modal.classList.remove("modal_showed");
       document.body.classList.remove("body_overflow-restriction");
     },
+    showModalByScroll: () => {
+      if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+        modalFormController.showModal();
+    }
+    }
   };
 
   modalFormController.modalTriggers.forEach((btn) => btn.addEventListener("click", modalFormController.showModal));
@@ -115,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
   modalFormController.modal.addEventListener("click", (event) => {
     if (event.target === modalFormController.modal) {
       modalFormController.closeModal();
+      window.removeEventListener('scroll', modalFormController.showModalByScroll);
     }
   });
 
@@ -125,4 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
       modalFormController.closeModal();
     }
   });
+
+  const modalTimerId = setInterval(modalFormController.showModal, 5000);
+  window.addEventListener('scroll', modalFormController.showModalByScroll);
 });
