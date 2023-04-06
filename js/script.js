@@ -209,13 +209,18 @@ document.addEventListener("DOMContentLoaded", () => {
       statusMessage.textContent = message.loading;
       form.append(statusMessage);
 
+      // Prepairing HTTP/POST request
       const request = new XMLHttpRequest();
       request.open('POST', 'php/server.php');
+      request.setRequestHeader('Content-type', 'application/json');
 
-      // request.setRequestHeader('Content-type', 'multipart/form-data');
+      // Retrieve data from forms
       const formData = new FormData(form);
+      const formsJson = {};
+      formData.forEach(function (value, key) { formsJson[key] = value });
+      const json = JSON.stringify(formsJson);
 
-      request.send(formData);
+      request.send(json);
       request.addEventListener('load', () => {
         if (request.status === 200) {
           console.log(request.response);
