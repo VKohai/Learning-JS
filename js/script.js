@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Show modal in 5 sec.
-  // const modalTimerId = setInterval(modalFormController.showModal, 5000);
+  const modalTimerId = setInterval(modalFormController.showModal, 5000);
   window.addEventListener('scroll', modalFormController.showModalByScroll);
 
 
@@ -189,4 +189,43 @@ document.addEventListener("DOMContentLoaded", () => {
     ".menu .container",
     "menu__item", "big__ass"
   ).render();
+
+
+  // Forms
+  const forms = document.querySelectorAll('form');
+  const message = {
+    loading: 'Загрузка',
+    success: 'Спасибо! Скоро наш менеджер с Вами свяжется.',
+    failure: 'Что-то пошло не так',
+  }
+  forms.forEach(form => postData(form));
+
+  function postData(form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const statusMessage = document.createElement('div');
+      statusMessage.classList.add('status');
+      statusMessage.textContent = message.loading;
+      form.append(statusMessage);
+
+      const request = new XMLHttpRequest();
+      request.open('POST', 'php/server.php');
+
+      // request.setRequestHeader('Content-type', 'multipart/form-data');
+      const formData = new FormData(form);
+
+      request.send(formData);
+      request.addEventListener('load', () => {
+        if (request.status === 200) {
+          console.log(request.response);
+          statusMessage.textContent = message.success;
+          form.reset();
+          setTimeout(() => statusMessage.remove(), 5000);
+        } else {
+          statusMessage.textContent = message.failure;
+        }
+      })
+    });
+  }
 });
