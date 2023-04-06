@@ -100,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Modal form
   const modalFormController = {
     modal: document.querySelector(".modal"),
-    closeModalBtn: document.querySelector(".modal__close"),
     modalTriggers: document.querySelectorAll("[data-modal]"),
     showModal: () => {
       modalFormController.modal.classList.add("modal_showed");
@@ -120,9 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   modalFormController.modalTriggers.forEach((btn) => btn.addEventListener("click", modalFormController.showModal));
-  modalFormController.closeModalBtn.addEventListener("click", modalFormController.closeModal);
   modalFormController.modal.addEventListener("click", (event) => {
-    if (event.target === modalFormController.modal) {
+    if (event.target === modalFormController.modal ||
+      event.target.getAttribute('data-close') == '') {
       modalFormController.closeModal();
       window.removeEventListener('scroll', modalFormController.showModalByScroll);
     }
@@ -136,8 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Show modal in 5 sec.
-  const modalTimerId = setInterval(modalFormController.showModal, 5000);
+  // Show modal in 60 sec.
+  const modalTimerId = setInterval(modalFormController.showModal, 60000);
   window.addEventListener('scroll', modalFormController.showModalByScroll);
 
 
@@ -187,14 +186,14 @@ document.addEventListener("DOMContentLoaded", () => {
     'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.',
     3455666,
     ".menu .container",
-    "menu__item", "big__ass"
+    "menu__item"
   ).render();
 
 
   // Forms
   const forms = document.querySelectorAll('form');
   const message = {
-    loading: 'Загрузка',
+    loading: 'img/form/spinner.svg',
     success: 'Спасибо! Скоро наш менеджер с Вами свяжется.',
     failure: 'Что-то пошло не так',
   }
@@ -204,10 +203,11 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      const statusMessage = document.createElement('div');
+      const statusMessage = document.createElement('img');
       statusMessage.classList.add('status');
-      statusMessage.textContent = message.loading;
-      form.append(statusMessage);
+      statusMessage.src = message.loading;
+      statusMessage.alt = "loading";
+      form.insertAdjacentElement('afterend', statusMessage);
 
       // Prepairing HTTP/POST request
       const request = new XMLHttpRequest();
@@ -224,13 +224,37 @@ document.addEventListener("DOMContentLoaded", () => {
       request.addEventListener('load', () => {
         if (request.status === 200) {
           console.log(request.response);
-          statusMessage.textContent = message.success;
+          showThanksModal(message.success);
           form.reset();
-          setTimeout(() => statusMessage.remove(), 5000);
+          statusMessage.remove();
         } else {
-          statusMessage.textContent = message.failure;
+          showThanksModal(message.failure);
         }
       })
     });
+  }
+
+
+  function showThanksModal(message) {
+    const modal = document.querySelector('.modal__dialog');
+    modal.classList.add('hide');
+    modalFormController.showModal();
+
+    const thanksContent = document.createElement('div');
+    thanksContent.classList.add('modal__dialog');
+    thanksContent.innerHTML = `
+      <div class="modal__content">
+                <form action="#">
+                    <div data-close class="modal__close">&times;</div>
+                    <div class="modal__title">${message}</div>
+                </form>
+            </div>
+    `;
+    document.querySelector('.modal').append(thanksContent);
+    setInterval(() => {
+      thanksContent.remove();
+      modal.classList.remove('hide');
+
+    }, 4000);
   }
 });
