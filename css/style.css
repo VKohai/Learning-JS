@@ -11,6 +11,10 @@
     overflow: hidden;
 }
 
+.hide {
+    display: none;
+}
+
 a {
     text-decoration: none
 }
@@ -728,7 +732,6 @@ a {
 }
 
 .status {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 15px;
+    display: block;
+    margin: 15px auto 0 auto;
 }
