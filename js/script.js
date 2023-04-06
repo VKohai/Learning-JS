@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showModalByScroll: () => {
       if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
         modalFormController.showModal();
-    }
+      }
     }
   };
 
@@ -142,8 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Card class
-  class MenuCard{
-    constructor(srcImg, alt, title, descr, price, parentSelector, ...classes){
+  class MenuCard {
+    constructor(srcImg, alt, title, descr, price, parentSelector, ...classes) {
       this.srcImg = srcImg;
       this.alt = alt;
       this.title = title;
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.changeToUAH();
     }
 
-    changeToUAH(){
+    changeToUAH() {
       this.price = this.price * this.transfer;
     }
 
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement('div');
       if (this.classes.length === 0) {
         card.classList.add('menu__item');
-      } else{
+      } else {
         this.classes.forEach(currentClass => card.classList.add(currentClass));
       }
       card.innerHTML = `
