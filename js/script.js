@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showModalByScroll: () => {
       if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
         modalFormController.showModal();
-    }
+      }
     }
   };
 
@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Show modal in 5 sec.
-  // const modalTimerId = setInterval(modalFormController.showModal, 5000);
+  const modalTimerId = setInterval(modalFormController.showModal, 5000);
   window.addEventListener('scroll', modalFormController.showModalByScroll);
 
 
   // Card class
-  class MenuCard{
-    constructor(srcImg, alt, title, descr, price, parentSelector, ...classes){
+  class MenuCard {
+    constructor(srcImg, alt, title, descr, price, parentSelector, ...classes) {
       this.srcImg = srcImg;
       this.alt = alt;
       this.title = title;
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.changeToUAH();
     }
 
-    changeToUAH(){
+    changeToUAH() {
       this.price = this.price * this.transfer;
     }
 
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement('div');
       if (this.classes.length === 0) {
         card.classList.add('menu__item');
-      } else{
+      } else {
         this.classes.forEach(currentClass => card.classList.add(currentClass));
       }
       card.innerHTML = `
@@ -189,4 +189,48 @@ document.addEventListener("DOMContentLoaded", () => {
     ".menu .container",
     "menu__item", "big__ass"
   ).render();
+
+
+  // Forms
+  const forms = document.querySelectorAll('form');
+  const message = {
+    loading: 'Загрузка',
+    success: 'Спасибо! Скоро наш менеджер с Вами свяжется.',
+    failure: 'Что-то пошло не так',
+  }
+  forms.forEach(form => postData(form));
+
+  function postData(form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const statusMessage = document.createElement('div');
+      statusMessage.classList.add('status');
+      statusMessage.textContent = message.loading;
+      form.append(statusMessage);
+
+      // Prepairing HTTP/POST request
+      const request = new XMLHttpRequest();
+      request.open('POST', 'php/server.php');
+      request.setRequestHeader('Content-type', 'application/json');
+
+      // Retrieve data from forms
+      const formData = new FormData(form);
+      const formsJson = {};
+      formData.forEach(function (value, key) { formsJson[key] = value });
+      const json = JSON.stringify(formsJson);
+
+      request.send(json);
+      request.addEventListener('load', () => {
+        if (request.status === 200) {
+          console.log(request.response);
+          statusMessage.textContent = message.success;
+          form.reset();
+          setTimeout(() => statusMessage.remove(), 5000);
+        } else {
+          statusMessage.textContent = message.failure;
+        }
+      })
+    });
+  }
 });
