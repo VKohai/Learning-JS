@@ -214,23 +214,28 @@ document.addEventListener("DOMContentLoaded", () => {
       request.open('POST', 'php/server.php');
       request.setRequestHeader('Content-type', 'application/json');
 
+
+
       // Retrieve data from forms
       const formData = new FormData(form);
       const formsJson = {};
       formData.forEach(function (value, key) { formsJson[key] = value });
-      const json = JSON.stringify(formsJson);
 
-      request.send(json);
-      request.addEventListener('load', () => {
-        if (request.status === 200) {
+      fetch("php/server.php", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(formsJson)
+      })
+        .then(response => {
           console.log(request.response);
           showThanksModal(message.success);
-          form.reset();
+
           statusMessage.remove();
-        } else {
-          showThanksModal(message.failure);
-        }
-      })
+        })
+        .catch(() => showThanksModal(message.failure))
+        .finally(() => form.reset());
     });
   }
 
