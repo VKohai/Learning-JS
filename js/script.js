@@ -203,24 +203,19 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
+      // Setting notify messages
       const statusMessage = document.createElement('img');
       statusMessage.classList.add('status');
       statusMessage.src = message.loading;
       statusMessage.alt = "loading";
       form.insertAdjacentElement('afterend', statusMessage);
 
-      // Prepairing HTTP/POST request
-      const request = new XMLHttpRequest();
-      request.open('POST', 'php/server.php');
-      request.setRequestHeader('Content-type', 'application/json');
-
-
-
       // Retrieve data from forms
       const formData = new FormData(form);
       const formsJson = {};
       formData.forEach(function (value, key) { formsJson[key] = value });
 
+      // Prepairing HTTP/POST request and making request
       fetch("php/server.php", {
         method: "POST",
         headers: {
