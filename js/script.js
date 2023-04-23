@@ -286,4 +286,17 @@ document.addEventListener("DOMContentLoaded", () => {
       modalFormController.closeModal();
     }, 4 * 1000);
   }
+
+
+  // Slider
+  const sliderWrapper = document.querySelector('.offer__slider-wrapper'),
+    currentSlide = document.querySelector('#current'),
+    totalSlides = document.querySelector('#total'),
+    nextBtn = document.querySelector('.offer__slider-next'),
+    prevBtn = document.querySelector('.offer__slider-prev');
+
+
+
+
+
 });
