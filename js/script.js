@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  function getZero(num) {
+    if (num >= 0 && num < 10) {
+      return `0${num}`;
+    }
+    return num;
+  }
   // Tabs
   const tabsController = {
     tabContent: document.querySelectorAll(".tabcontent"),
@@ -61,12 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
         seconds: seconds,
       };
     },
-    getZero: (num) => {
-      if (num >= 0 && num < 10) {
-        return `0${num}`;
-      }
-      return num;
-    },
     setClock: (selector, endtime) => {
       const timer = document.querySelector(selector),
         days = timer.querySelector("#days"),
@@ -81,10 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
       function updateClock() {
         const t = timerController.getTimeRemaining(endtime);
 
-        days.innerHTML = timerController.getZero(t.days);
-        hours.innerHTML = timerController.getZero(t.hours);
-        minutes.innerHTML = timerController.getZero(t.minutes);
-        seconds.innerHTML = timerController.getZero(t.seconds);
+        days.innerHTML = getZero(t.days);
+        hours.innerHTML = getZero(t.hours);
+        minutes.innerHTML = getZero(t.minutes);
+        seconds.innerHTML = getZero(t.seconds);
 
         if (t.total <= 0) {
           clearInterval(timerInterval);
@@ -295,14 +295,36 @@ document.addEventListener("DOMContentLoaded", () => {
     totalSlidesCounter: document.querySelector('#total'),
     nextBtn: document.querySelector('.offer__slider-next'),
     prevBtn: document.querySelector('.offer__slider-prev'),
-    showSlide: (index = 0) => {
+    currentIndex: 0,
+    setSlide: (index = slider.currentIndex) => {
+      slider.hideSlides();
+      if (index >= slider.slides.length) {
+        index = 0;
+      } else if (index < 0) {
+        index = slider.slides.length - 1
+      }
       slider.slides[index].classList.remove("hide");
       slider.slides[index].classList.add("offer__slide_active");
+      slider.currentIndex = index;
+      slider.currentSlideCounter.textContent = getZero(index + 1);
     },
     hideSlides: () => {
-      slider.slides.forEach(slide => slide.classList.add("hide"));
+      slider.slides.forEach(slide => {
+        slide.classList.add("hide");
+        slide.classList.remove('offer__slide_active');
+      });
     }
   };
+
+  slider.nextBtn.addEventListener('click', () => {
+    slider.setSlide(slider.currentIndex + 1);
+  });
+  slider.prevBtn.addEventListener('click', () => {
+    slider.setSlide(slider.currentIndex - 1);
+  });
+
+  slider.totalSlidesCounter.textContent = getZero(slider.slides.length);
   slider.hideSlides();
-  slider.showSlide();
+  slider.setSlide();
+
 });
