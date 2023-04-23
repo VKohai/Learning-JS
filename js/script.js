@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  function getZero(num) {
+    if (num >= 0 && num < 10) {
+      return `0${num}`;
+    }
+    return num;
+  }
   // Tabs
   const tabsController = {
     tabContent: document.querySelectorAll(".tabcontent"),
@@ -61,12 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
         seconds: seconds,
       };
     },
-    getZero: (num) => {
-      if (num >= 0 && num < 10) {
-        return `0${num}`;
-      }
-      return num;
-    },
     setClock: (selector, endtime) => {
       const timer = document.querySelector(selector),
         days = timer.querySelector("#days"),
@@ -81,10 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
       function updateClock() {
         const t = timerController.getTimeRemaining(endtime);
 
-        days.innerHTML = timerController.getZero(t.days);
-        hours.innerHTML = timerController.getZero(t.hours);
-        minutes.innerHTML = timerController.getZero(t.minutes);
-        seconds.innerHTML = timerController.getZero(t.seconds);
+        days.innerHTML = getZero(t.days);
+        hours.innerHTML = getZero(t.hours);
+        minutes.innerHTML = getZero(t.minutes);
+        seconds.innerHTML = getZero(t.seconds);
 
         if (t.total <= 0) {
           clearInterval(timerInterval);
@@ -286,4 +286,47 @@ document.addEventListener("DOMContentLoaded", () => {
       modalFormController.closeModal();
     }, 4 * 1000);
   }
+
+  const carousel = {
+    slides: document.querySelectorAll('.offer__slide'),
+    currentSlideCounter: document.querySelector('#current'),
+    totalSlidesCounter: document.querySelector('#total'),
+    nextBtn: document.querySelector('.offer__slider-next'),
+    prevBtn: document.querySelector('.offer__slider-prev'),
+    wrapper: document.querySelector('.offer__slider-wrapper'),
+    field: document.querySelector('.offer__slider-inner'),
+    currentIndex: 0,
+    offset: 0
+  };
+  innerWidth = window.getComputedStyle(carousel.wrapper).width;
+
+  carousel.field.style.width = 100 * carousel.slides.length + '%';
+  carousel.slides.forEach(slide => slide.style.width = innerWidth);
+  carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex + 1);
+  carousel.totalSlidesCounter.textContent = getZero(carousel.slides.length);
+
+  carousel.nextBtn.addEventListener('click', () => {
+    const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
+    if (carousel.offset == innerWidthPixels * (carousel.slides.length - 1)) {
+      carousel.offset = 0;
+      carousel.currentIndex = 0;
+    } else {
+      carousel.offset += innerWidthPixels;
+      ++carousel.currentIndex;
+    }
+    carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex + 1);
+    carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
+  });
+
+  carousel.prevBtn.addEventListener('click', () => {
+    const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
+    if (carousel.offset == 0) {
+      carousel.offset = innerWidthPixels * (carousel.slides.length - 1);
+      carousel.currentIndex = carousel.slides.length;
+    } else {
+      carousel.offset -= innerWidthPixels;
+    }
+    carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex--);
+    carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
+  });
 });
