@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const getResourses = async (url) => {
+  const getResoursesAsync = async (url) => {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Could not fetch ${url}, status: ${response.status}`);
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return await response.json();
   };
 
-  getResourses("http://localhost:3000/menu")
+  getResoursesAsync("http://localhost:3000/menu")
     .then(cards => cards.forEach(
       card => new MenuCard(
         card.img,
@@ -214,16 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
     )
     );
 
-  // new MenuCard(
-  //   "img/tabs/vegy.jpg",
-  //   "vegy",
-  //   'Меню "Сбалансированное"',
-  //   'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.',
-  //   3455666,
-  //   ".menu .container",
-  //   "menu__item"
-  // ).render();
-
   // Forms
   const forms = document.querySelectorAll("form");
   const message = {
@@ -235,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  const postData = async (url, data) => {
+  const postDataAsync = async (url, data) => {
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -262,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const formsJson = JSON.stringify(Object.fromEntries(formData.entries()));
 
       // Making POST request
-      postData("http://localhost:3000/requests", formsJson)
+      postDataAsync("http://localhost:3000/requests", formsJson)
         .then((response) => {
           showThanksModal(message.success);
           statusMessage.remove();
