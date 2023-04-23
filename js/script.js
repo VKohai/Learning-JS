@@ -197,9 +197,21 @@ document.addEventListener("DOMContentLoaded", () => {
     success: 'Спасибо! Скоро наш менеджер с Вами свяжется.',
     failure: 'Что-то пошло не так',
   }
-  forms.forEach(form => postData(form));
+  forms.forEach(form => bindPostData(form));
 
-  function postData(form) {
+  const postData = async (url, data) => {
+    const result = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: data
+    });
+
+    return await result.json();
+  }
+
+  function bindPostData(form) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
@@ -214,20 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
       request.open('POST', 'php/server.php');
       request.setRequestHeader('Content-type', 'application/json');
 
-
-
       // Retrieve data from forms
       const formData = new FormData(form);
       const formsJson = {};
       formData.forEach(function (value, key) { formsJson[key] = value });
 
-      fetch("php/server.php", {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(formsJson)
-      })
+      postData("http://localhost:3000/requests", JSON.stringify(formsJson))
         .then(response => {
           console.log(request.response);
           showThanksModal(message.success);
