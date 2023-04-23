@@ -259,7 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
       thanksContent.remove();
       modal.classList.remove('hide');
-
     }, 4000);
   }
 });
+
+fetch("db.json")
+  .then(data => data.json())
+  .then(result => console.log(result));
