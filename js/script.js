@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
   // Timer
   const deadline = "2023-05-20";
   const timerController = {
@@ -96,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   timerController.setClock(".timer", deadline);
 
-
   // Modal form
   const modalFormController = {
     modal: document.querySelector(".modal"),
@@ -105,30 +103,45 @@ document.addEventListener("DOMContentLoaded", () => {
       modalFormController.modal.classList.add("modal_showed");
       document.body.classList.add("body_overflow-restriction");
       clearInterval(modalTimerId);
-      window.removeEventListener('scroll', modalFormController.showModalByScroll);
+      window.removeEventListener(
+        "scroll",
+        modalFormController.showModalByScroll
+      );
     },
     closeModal: () => {
       modalFormController.modal.classList.remove("modal_showed");
+      modalFormController.modal.classList.add("hide");
       document.body.classList.remove("body_overflow-restriction");
     },
     showModalByScroll: () => {
-      if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      if (
+        window.scrollY + document.documentElement.clientHeight >=
+        document.documentElement.scrollHeight
+      ) {
         modalFormController.showModal();
       }
-    }
+    },
   };
 
-  modalFormController.modalTriggers.forEach((btn) => btn.addEventListener("click", modalFormController.showModal));
+  modalFormController.modalTriggers.forEach((btn) =>
+    btn.addEventListener("click", modalFormController.showModal)
+  );
   modalFormController.modal.addEventListener("click", (event) => {
-    if (event.target === modalFormController.modal ||
-      event.target.getAttribute('data-close') == '') {
+    if (
+      event.target === modalFormController.modal ||
+      event.target.getAttribute("data-close") == ""
+    ) {
       modalFormController.closeModal();
-      window.removeEventListener('scroll', modalFormController.showModalByScroll);
+      window.removeEventListener(
+        "scroll",
+        modalFormController.showModalByScroll
+      );
     }
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.code === "Escape" &&
+    if (
+      event.code === "Escape" &&
       modalFormController.modal.classList.contains("modal_showed")
     ) {
       modalFormController.closeModal();
@@ -137,8 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Show modal in 60 sec.
   const modalTimerId = setInterval(modalFormController.showModal, 60000);
-  window.addEventListener('scroll', modalFormController.showModalByScroll);
-
+  window.addEventListener("scroll", modalFormController.showModalByScroll);
 
   // Card class
   class MenuCard {
@@ -159,11 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     render() {
-      const card = document.createElement('div');
+      const card = document.createElement("div");
       if (this.classes.length === 0) {
-        card.classList.add('menu__item');
+        card.classList.add("menu__item");
       } else {
-        this.classes.forEach(currentClass => card.classList.add(currentClass));
+        this.classes.forEach((currentClass) =>
+          card.classList.add(currentClass)
+        );
       }
       card.innerHTML = `
       <img src="${this.srcImg}" alt="${this.alt}">
@@ -179,87 +193,107 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  new MenuCard(
-    "img/tabs/vegy.jpg",
-    "vegy",
-    'Меню "Сбалансированное"',
-    'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.',
-    3455666,
-    ".menu .container",
-    "menu__item"
-  ).render();
+  const getResourses = async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${response.status}`);
+    }
+    return await response.json();
+  };
 
+  getResourses("http://localhost:3000/menu")
+    .then(cards => cards.forEach(
+      card => new MenuCard(
+        card.img,
+        card.altimg,
+        card.title,
+        card.descr,
+        card.price,
+        ".menu .container",
+      ).render()
+    )
+    );
+
+  // new MenuCard(
+  //   "img/tabs/vegy.jpg",
+  //   "vegy",
+  //   'Меню "Сбалансированное"',
+  //   'Меню "Сбалансированное" - это соответствие вашего рациона всем научным рекомендациям. Мы тщательно просчитываем вашу потребность в к/б/ж/у и создаем лучшие блюда для вас.',
+  //   3455666,
+  //   ".menu .container",
+  //   "menu__item"
+  // ).render();
 
   // Forms
-  const forms = document.querySelectorAll('form');
+  const forms = document.querySelectorAll("form");
   const message = {
-    loading: 'img/form/spinner.svg',
-    success: 'Спасибо! Скоро наш менеджер с Вами свяжется.',
-    failure: 'Что-то пошло не так',
-  }
-  forms.forEach(form => bindPostData(form));
+    loading: "img/form/spinner.svg",
+    success: "Спасибо! Скоро наш менеджер с Вами свяжется.",
+    failure: "Что-то пошло не так",
+  };
+  forms.forEach((form) => bindPostData(form));
+
+
 
   const postData = async (url, data) => {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        'Content-type': 'application/json'
+        "Content-type": "application/json",
       },
-      body: data
+      body: data,
     });
     return await response.json();
-  }
+  };
 
   function bindPostData(form) {
-    form.addEventListener('submit', (event) => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
 
       // Setting notify messages
-      const statusMessage = document.createElement('img');
-      statusMessage.classList.add('status');
+      let statusMessage = document.createElement("img");
+      statusMessage.classList.add("status");
       statusMessage.src = message.loading;
       statusMessage.alt = "loading";
-      form.insertAdjacentElement('afterend', statusMessage);
+      form.insertAdjacentElement("afterend", statusMessage);
 
       // Retrieve data from forms
       const formData = new FormData(form);
-      const formsJson = {};
-      formData.forEach(function (value, key) { formsJson[key] = value });
+      const formsJson = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      // Prepairing HTTP/POST request and making request
-      postData("http://localhost:3000/requests", JSON.stringify(formsJson))
-        .then(response => {
-          console.log(request.response);
+      // Making POST request
+      postData("http://localhost:3000/requests", formsJson)
+        .then((response) => {
           showThanksModal(message.success);
-
           statusMessage.remove();
         })
-        .catch(() => showThanksModal(message.failure))
+        .catch(() => {
+          showThanksModal(message.failure);
+        })
         .finally(() => form.reset());
     });
   }
 
-
   function showThanksModal(message) {
-    const modal = document.querySelector('.modal__dialog');
-    modal.classList.add('hide');
+    const modal = document.querySelector(".modal__dialog");
+    modal.classList.add("hide");
     modalFormController.showModal();
 
-    const thanksContent = document.createElement('div');
-    thanksContent.classList.add('modal__dialog');
+    const thanksContent = document.createElement("div");
+    thanksContent.classList.add("modal__dialog");
     thanksContent.innerHTML = `
       <div class="modal__content">
-                <form action="#">
-                    <div data-close class="modal__close">&times;</div>
-                    <div class="modal__title">${message}</div>
-                </form>
-            </div>
+          <div data-close class="modal__close">&times;</div>
+          <div class="modal__title">${message}</div>
+      </div>
     `;
-    document.querySelector('.modal').append(thanksContent);
-    setInterval(() => {
-      thanksContent.remove();
-      modal.classList.remove('hide');
+    document.querySelector(".modal").append(thanksContent);
 
-    }, 4000);
+    // It doesn't work cause a page reloads (and I don't know why);
+    setTimeout(() => {
+      thanksContent.remove();
+      modal.classList.remove("hide");
+      modalFormController.closeModal();
+    }, 4 * 1000);
   }
 });

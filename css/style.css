@@ -470,6 +470,8 @@ a {
 .menu .container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 50px;
     align-items: flex-start
 }
 
