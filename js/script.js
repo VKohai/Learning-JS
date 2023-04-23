@@ -289,11 +289,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Slider
-  const sliderWrapper = document.querySelector('.offer__slider-wrapper'),
-    currentSlide = document.querySelector('#current'),
-    totalSlides = document.querySelector('#total'),
-    nextBtn = document.querySelector('.offer__slider-next'),
-    prevBtn = document.querySelector('.offer__slider-prev');
+  const slider = {
+    sliderWrapper: document.querySelector('.offer__slider-wrapper'),
+    currentSlide: document.querySelector('#current'),
+    totalSlides: document.querySelector('#total'),
+    nextBtn: document.querySelector('.offer__slider-next'),
+    prevBtn: document.querySelector('.offer__slider-prev'),
+    showSlide: (index) => {
+
+    }
+  };
 
 
 
