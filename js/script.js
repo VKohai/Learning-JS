@@ -316,12 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  slider.nextBtn.addEventListener('click', () => {
-    slider.setSlide(slider.currentIndex + 1);
-  });
-  slider.prevBtn.addEventListener('click', () => {
-    slider.setSlide(slider.currentIndex - 1);
-  });
+  slider.nextBtn.addEventListener('click', () => slider.setSlide(slider.currentIndex + 1));
+  slider.prevBtn.addEventListener('click', () => slider.setSlide(slider.currentIndex - 1));
 
   slider.totalSlidesCounter.textContent = getZero(slider.slides.length);
   slider.hideSlides();
