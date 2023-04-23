@@ -351,6 +351,10 @@ a {
     height: 390px
 }
 
+.offer__slide_active {
+    display: block;
+}
+
 .offer__slide img {
     width: 100%;
     height: 100%;
