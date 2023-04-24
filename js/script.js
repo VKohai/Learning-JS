@@ -289,6 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const carousel = {
     slides: document.querySelectorAll('.offer__slide'),
+    slider: document.querySelector('.offer__slider'),
     currentSlideCounter: document.querySelector('#current'),
     totalSlidesCounter: document.querySelector('#total'),
     nextBtn: document.querySelector('.offer__slider-next'),
@@ -300,11 +301,22 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   innerWidth = window.getComputedStyle(carousel.wrapper).width;
 
+  // Carousel settings
   carousel.field.style.width = 100 * carousel.slides.length + '%';
   carousel.slides.forEach(slide => slide.style.width = innerWidth);
   carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex + 1);
   carousel.totalSlidesCounter.textContent = getZero(carousel.slides.length);
 
+  // Dots Wrapper
+  const dotsWrapper = document.createElement('ol'),
+    dots = [];
+  dotsWrapper.classList.add('carousel-indicators');
+
+  function activateDot() {
+    document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('dot_active'));
+    dots[carousel.currentIndex].classList.add('dot_active');
+  }
+  // Navigating forward
   carousel.nextBtn.addEventListener('click', () => {
     const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
     if (carousel.offset == innerWidthPixels * (carousel.slides.length - 1)) {
@@ -316,8 +328,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex + 1);
     carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
+
+    activateDot();
   });
 
+  // Navigating back
   carousel.prevBtn.addEventListener('click', () => {
     const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
     if (carousel.offset == 0) {
@@ -328,5 +343,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex--);
     carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
+
+    activateDot();
   });
+
+  // Creating dots
+  for (let i = 0; i < carousel.slides.length; ++i) {
+    const dot = document.createElement('li');
+    dot.setAttribute('data-slide-to', i + 1);
+    dot.classList.add('dot');
+    dotsWrapper.append(dot);
+    dots.push(dot);
+  }
+
+  // Matches current slide with dot
+  dots[carousel.currentIndex].classList.add('dot_active');
+
+  // Navigating by click
+  dotsWrapper.addEventListener('click', event => {
+    if (event.target.classList.contains('dot') && event.target) {
+
+      carousel.currentIndex = event.target.getAttribute('data-slide-to');
+      carousel.offset = +innerWidth.slice(0, innerWidth.length - 2) * (carousel.currentIndex - 1);
+      carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
+      carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex--);
+      activateDot();
+    }
+  });
+  carousel.slider.append(dotsWrapper);
 });
