@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentIndex: 0,
     offset: 0
   };
-  innerWidth = window.getComputedStyle(carousel.wrapper).width;
+  innerWidth = +window.getComputedStyle(carousel.wrapper).width.replace(/\D/g, '');
 
   // Carousel settings
   carousel.field.style.width = 100 * carousel.slides.length + '%';
@@ -318,12 +318,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   // Navigating forward
   carousel.nextBtn.addEventListener('click', () => {
-    const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
-    if (carousel.offset == innerWidthPixels * (carousel.slides.length - 1)) {
+    if (carousel.offset == innerWidth * (carousel.slides.length - 1)) {
       carousel.offset = 0;
       carousel.currentIndex = 0;
     } else {
-      carousel.offset += innerWidthPixels;
+      carousel.offset += innerWidth;
       ++carousel.currentIndex;
     }
     carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex + 1);
@@ -334,12 +333,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Navigating back
   carousel.prevBtn.addEventListener('click', () => {
-    const innerWidthPixels = +innerWidth.slice(0, innerWidth.length - 2);
     if (carousel.offset == 0) {
-      carousel.offset = innerWidthPixels * (carousel.slides.length - 1);
+      carousel.offset = innerWidth * (carousel.slides.length - 1);
       carousel.currentIndex = carousel.slides.length;
     } else {
-      carousel.offset -= innerWidthPixels;
+      carousel.offset -= innerWidth;
     }
     carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex--);
     carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
@@ -362,9 +360,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Navigating by click
   dotsWrapper.addEventListener('click', event => {
     if (event.target.classList.contains('dot') && event.target) {
-
       carousel.currentIndex = event.target.getAttribute('data-slide-to');
-      carousel.offset = +innerWidth.slice(0, innerWidth.length - 2) * (carousel.currentIndex - 1);
+      carousel.offset = innerWidth * (carousel.currentIndex - 1);
       carousel.field.style.transform = `translateX(-${carousel.offset}px)`;
       carousel.currentSlideCounter.textContent = getZero(carousel.currentIndex--);
       activateDot();
