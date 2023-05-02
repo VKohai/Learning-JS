@@ -211,8 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.price,
         ".menu .container",
       ).render()
-    )
-    );
+    ));
 
   // Forms
   const forms = document.querySelectorAll("form");
@@ -368,4 +367,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   carousel.slider.append(dotsWrapper);
+
+  // Calculator
+  const calories = document.querySelector('.calculating__result span');
+  let sex = document.querySelector('#gender .calculating__choose-item_active').getAttribute('id'),
+    ratio = +document.querySelector('.calculating__choose_big .calculating__choose-item_active').getAttribute('data-ratio'),
+    height, weight, age;
+
+  function calcTotal() {
+    let result = 0
+    if (!sex || !height || !weight || !age || !ratio) {
+      calories.textContent = result;
+      return;
+    }
+    if (sex == 'male') {
+      result = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio;
+    } else {
+      result = (447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio;
+    }
+    calories.textContent = Math.round(result * 100) / 100;
+  }
+
+  function getStaticInformation(parentSelector, activeClass) {
+    const elements = document.querySelectorAll(`${parentSelector} div`);
+    elements.forEach(elem => elem.addEventListener('click', (e) => {
+      if (e.target.getAttribute('data-ratio')) {
+        ratio = +e.target.getAttribute('data-ratio')
+      } else {
+        sex = e.target.getAttribute('id');
+      }
+      elements.forEach(el => {
+        el.classList.remove(activeClass);
+      })
+      e.target.classList.add(activeClass);
+      calcTotal();
+    }));
+  }
+
+
+
+  function getDynamicInformation(...selector) {
+    const input = document.querySelector(selector);
+    input.addEventListener('input', () => {
+      switch (input.getAttribute('id')) {
+        case 'height':
+          height = +input.value;
+          break;
+        case 'weight':
+          weight = +input.value;
+          break;
+        case 'age':
+          age = +input.value;
+          break;
+      }
+      calcTotal();
+    });
+    calcTotal();
+  }
+
+  getStaticInformation('.calculating__choose_big', 'calculating__choose-item_active');
+  getStaticInformation('#gender', 'calculating__choose-item_active');
+  getDynamicInformation('#height');
+  getDynamicInformation('#weight');
+  getDynamicInformation('#age');
 });
