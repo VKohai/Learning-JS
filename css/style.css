@@ -429,6 +429,12 @@ a {
     transition: .3s all
 }
 
+.calculating__choose-item_error {
+    transition: none;
+    border: 2px solid red;
+    border-radius: 4px;
+}
+
 .calculating__choose-item_active {
     color: #fff;
     background-color: #54ed39
