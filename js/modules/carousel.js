@@ -1,10 +1,5 @@
+import { getZero } from "./timer";
 function carousel() {
-    function getZero(num) {
-        if (num >= 0 && num < 10) {
-            return `0${num}`;
-        }
-        return num;
-    }
     const carousel = {
         slides: document.querySelectorAll('.offer__slide'),
         slider: document.querySelector('.offer__slider'),
@@ -88,4 +83,4 @@ function carousel() {
     carousel.slider.append(dotsWrapper);
 }
 
-module.exports = carousel;
+export default carousel;

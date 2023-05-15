@@ -1,12 +1,12 @@
-function tabs() {
+function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass) {
     const tabsController = {
-        tabContent: document.querySelectorAll(".tabcontent"),
-        tabNav: document.querySelector(".tabheader__items"),
-        tabItems: document.querySelectorAll(".tabheader__item"),
+        tabContent: document.querySelectorAll(tabsContentSelector),
+        tabNav: document.querySelector(tabsParentSelector),
+        tabItems: document.querySelectorAll(tabsSelector),
 
         hideTabContent: () => {
             tabsController.tabItems.forEach((item) => {
-                item.classList.remove("tabheader__item_active");
+                item.classList.remove(activeClass);
             });
             tabsController.tabContent.forEach((item) => {
                 item.classList.add("tabcontent_hide");
@@ -14,7 +14,7 @@ function tabs() {
         },
 
         showTabContent: (index = 0) => {
-            tabsController.tabItems[index].classList.add("tabheader__item_active");
+            tabsController.tabItems[index].classList.add(activeClass);
             tabsController.tabContent[index].classList.remove("tabcontent_hide");
         },
     };
@@ -23,7 +23,7 @@ function tabs() {
     tabsController.showTabContent();
     tabsController.tabNav.addEventListener("click", (e) => {
         const target = e.target;
-        if (target.classList.contains("tabheader__item") && target) {
+        if (target.classList.contains(tabsSelector) && target) {
             tabsController.tabItems.forEach((item, index) => {
                 if (target == item) {
                     tabsController.hideTabContent();
@@ -34,4 +34,4 @@ function tabs() {
     });
 }
 
-module.exports = tabs;
+export default tabs;

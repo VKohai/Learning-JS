@@ -1,10 +1,10 @@
-function timer() {
-    function getZero(num) {
-        if (num >= 0 && num < 10) {
-            return `0${num}`;
-        }
-        return num;
+function getZero(num) {
+    if (num >= 0 && num < 10) {
+        return `0${num}`;
     }
+    return num;
+}
+function timer() {
     const deadline = "2023-05-20";
     const timerController = {
         getTimeRemaining: (endtime) => {
@@ -60,4 +60,5 @@ function timer() {
     timerController.setClock(".timer", deadline);
 }
 
-module.exports = timer;
+export default timer;
+export { getZero };
