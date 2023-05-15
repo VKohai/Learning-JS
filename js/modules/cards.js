@@ -1,4 +1,4 @@
-function card() {
+function cards() {
     class MenuCard {
         constructor(srcImg, alt, title, descr, price, parentSelector, ...classes) {
             this.srcImg = srcImg;
@@ -60,4 +60,4 @@ function card() {
         ));
 }
 
-module.exports = card;
+module.exports = cards;

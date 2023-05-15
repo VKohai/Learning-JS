@@ -2,11 +2,11 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'developmnet',
+    mode: 'development',
     entry: './js/script.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, '/js'),
+        path: path.resolve(__dirname, './js'),
     },
     watch: true,
     devtool: 'source-map',
