@@ -10,9 +10,18 @@ import calculator from './modules/calculator';
 document.addEventListener("DOMContentLoaded", () => {
   // Show modal in 60 sec.
   const modalTimerId = setInterval(() => showModal(".modal", modalTimerId), 60000);
-  timer();
+  timer(".timer", "2023-05-20");
   tabs(".tabheader__item", ".tabcontent", ".tabheader__items", "tabheader__item_active");
-  carousel();
+  carousel({
+    slidesSelector: '.offer__slide',
+    sliderSelector: '.offer__slider',
+    currentCounterSelector: '#current',
+    totalCounterSelector: '#total',
+    nextBtnSelector: '.offer__slider-next',
+    prevBtnSelector: '.offer__slider-prev',
+    fieldSelector: '.offer__slider-inner',
+    wrapper: '.offer__slider-wrapper'
+  });
   modal("[data-modal]", ".modal", modalTimerId);
   forms("form", modalTimerId);
   cards();

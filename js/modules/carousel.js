@@ -1,14 +1,15 @@
 import { getZero } from "./timer";
-function carousel() {
+function carousel({ slidesSelector, sliderSelector, currentCounterSelector, totalCounterSelector,
+    nextBtnSelector, prevBtnSelector, wrapper, fieldSelector }) {
     const carousel = {
-        slides: document.querySelectorAll('.offer__slide'),
-        slider: document.querySelector('.offer__slider'),
-        currentSlideCounter: document.querySelector('#current'),
-        totalSlidesCounter: document.querySelector('#total'),
-        nextBtn: document.querySelector('.offer__slider-next'),
-        prevBtn: document.querySelector('.offer__slider-prev'),
-        wrapper: document.querySelector('.offer__slider-wrapper'),
-        field: document.querySelector('.offer__slider-inner'),
+        slides: document.querySelectorAll(slidesSelector),
+        slider: document.querySelector(sliderSelector),
+        currentSlideCounter: document.querySelector(currentCounterSelector),
+        totalSlidesCounter: document.querySelector(totalCounterSelector),
+        nextBtn: document.querySelector(nextBtnSelector),
+        prevBtn: document.querySelector(prevBtnSelector),
+        wrapper: document.querySelector(wrapper),
+        field: document.querySelector(fieldSelector),
         currentIndex: 0,
         offset: 0
     };

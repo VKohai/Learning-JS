@@ -4,8 +4,8 @@ function getZero(num) {
     }
     return num;
 }
-function timer() {
-    const deadline = "2023-05-20";
+
+function timer(timerSelector, deadline) {
     const timerController = {
         getTimeRemaining: (endtime) => {
             let days, hours, minutes, seconds;
@@ -57,7 +57,7 @@ function timer() {
         },
     };
 
-    timerController.setClock(".timer", deadline);
+    timerController.setClock(timerSelector, deadline);
 }
 
 export default timer;

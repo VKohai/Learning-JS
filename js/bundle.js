@@ -211,16 +211,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./timer */ "./js/modules/timer.js");
 
-function carousel() {
+function carousel({ slidesSelector, sliderSelector, currentCounterSelector, totalCounterSelector,
+    nextBtnSelector, prevBtnSelector, wrapper, fieldSelector }) {
     const carousel = {
-        slides: document.querySelectorAll('.offer__slide'),
-        slider: document.querySelector('.offer__slider'),
-        currentSlideCounter: document.querySelector('#current'),
-        totalSlidesCounter: document.querySelector('#total'),
-        nextBtn: document.querySelector('.offer__slider-next'),
-        prevBtn: document.querySelector('.offer__slider-prev'),
-        wrapper: document.querySelector('.offer__slider-wrapper'),
-        field: document.querySelector('.offer__slider-inner'),
+        slides: document.querySelectorAll(slidesSelector),
+        slider: document.querySelector(sliderSelector),
+        currentSlideCounter: document.querySelector(currentCounterSelector),
+        totalSlidesCounter: document.querySelector(totalCounterSelector),
+        nextBtn: document.querySelector(nextBtnSelector),
+        prevBtn: document.querySelector(prevBtnSelector),
+        wrapper: document.querySelector(wrapper),
+        field: document.querySelector(fieldSelector),
         currentIndex: 0,
         offset: 0
     };
@@ -466,35 +467,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass) {
-    const tabsController = {
-        tabContent: document.querySelectorAll(tabsContentSelector),
-        tabNav: document.querySelector(tabsParentSelector),
-        tabItems: document.querySelectorAll(tabsSelector),
+    const tabContent = document.querySelectorAll(tabsContentSelector),
+        tabNav = document.querySelector(tabsParentSelector),
+        tabItems = document.querySelectorAll(tabsSelector);
 
-        hideTabContent: () => {
-            tabsController.tabItems.forEach((item) => {
-                item.classList.remove(activeClass);
-            });
-            tabsController.tabContent.forEach((item) => {
-                item.classList.add("tabcontent_hide");
-            });
-        },
-
-        showTabContent: (index = 0) => {
-            tabsController.tabItems[index].classList.add(activeClass);
-            tabsController.tabContent[index].classList.remove("tabcontent_hide");
-        },
+    function hideTabContent() {
+        tabItems.forEach((item) => {
+            item.classList.remove(activeClass);
+        });
+        tabContent.forEach((item) => {
+            item.classList.add("tabcontent_hide");
+        });
     };
+    function showTabContent(index = 0) {
+        tabItems[index].classList.add(activeClass);
+        tabContent[index].classList.remove("tabcontent_hide");
+    };
+    hideTabContent();
+    showTabContent();
 
-    tabsController.hideTabContent();
-    tabsController.showTabContent();
-    tabsController.tabNav.addEventListener("click", (e) => {
+    tabNav.addEventListener("click", (e) => {
         const target = e.target;
-        if (target.classList.contains(tabsSelector) && target) {
-            tabsController.tabItems.forEach((item, index) => {
+        if (target.classList.contains(tabsSelector.slice(1)) && target) {
+            tabItems.forEach((item, index) => {
                 if (target == item) {
-                    tabsController.hideTabContent();
-                    tabsController.showTabContent(index);
+                    hideTabContent();
+                    showTabContent(index);
                 }
             });
         }
@@ -522,8 +520,8 @@ function getZero(num) {
     }
     return num;
 }
-function timer() {
-    const deadline = "2023-05-20";
+
+function timer(timerSelector, deadline) {
     const timerController = {
         getTimeRemaining: (endtime) => {
             let days, hours, minutes, seconds;
@@ -575,7 +573,7 @@ function timer() {
         },
     };
 
-    timerController.setClock(".timer", deadline);
+    timerController.setClock(timerSelector, deadline);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
@@ -697,9 +695,18 @@ __webpack_require__.r(__webpack_exports__);
 document.addEventListener("DOMContentLoaded", () => {
   // Show modal in 60 sec.
   const modalTimerId = setInterval(() => (0,_modules_modal__WEBPACK_IMPORTED_MODULE_0__.showModal)(".modal", modalTimerId), 60000);
-  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_1__["default"])(".timer", "2023-05-20");
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])(".tabheader__item", ".tabcontent", ".tabheader__items", "tabheader__item_active");
-  (0,_modules_carousel__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  (0,_modules_carousel__WEBPACK_IMPORTED_MODULE_3__["default"])({
+    slidesSelector: '.offer__slide',
+    sliderSelector: '.offer__slider',
+    currentCounterSelector: '#current',
+    totalCounterSelector: '#total',
+    nextBtnSelector: '.offer__slider-next',
+    prevBtnSelector: '.offer__slider-prev',
+    fieldSelector: '.offer__slider-inner',
+    wrapper: '.offer__slider-wrapper'
+  });
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_0__["default"])("[data-modal]", ".modal", modalTimerId);
   (0,_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])("form", modalTimerId);
   (0,_modules_cards__WEBPACK_IMPORTED_MODULE_5__["default"])();
