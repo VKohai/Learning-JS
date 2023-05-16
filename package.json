@@ -12,11 +12,18 @@
   },
   "author": "Vlad Kohai",
   "license": "ISC",
+  "browserslist": [
+    "> 1%, not dead"
+  ],
   "bugs": {
     "url": "https://github.com/Kohaikaa/Learning-JS/issues"
   },
   "homepage": "https://github.com/Kohaikaa/Learning-JS#readme",
   "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "babel-loader": "^9.1.2",
     "json-server": "^0.17.3",
     "webpack": "^5.82.1",
     "webpack-cli": "^5.1.1"
