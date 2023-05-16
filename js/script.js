@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 import { showModal } from './modules/modal';
 import timer from './modules/timer';
 import tabs from './modules/tabs';
